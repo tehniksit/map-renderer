@@ -5,11 +5,7 @@ import os
 
 from django.conf import settings
 
-def handle_uploaded_file(f, path):
-
-	with open(path, 'wb+') as destination:
-		for chunk in f.chunks():
-			destination.write(chunk)
+from .services import *
 
 
 
@@ -19,6 +15,7 @@ def main(request):
 	message = ''
 	context = {}
 
+
 	if request.method == 'POST':
 		
 		form = UploadFileForm(request.POST, request.FILES)
@@ -26,9 +23,11 @@ def main(request):
 		if form.is_valid():
 			name = request.FILES['file'].name
 			if name.endswith('.zip'):
+				path = settings.MEDIA_ROOT
 				fullPath =  settings.MEDIA_ROOT + request.FILES['file'].name
-				handle_uploaded_file(request.FILES['file'], fullPath)
-				message = 'File succesfully uploaded'
+				handle_uploaded_file(request.FILES['file'], fullPath, path)
+				message = 'File {0} succesfully uploaded and unziped to {1}..'.format(name, path)
+				
 				return render(request, 'main.html', {'form': form, 'message':message})
 			else:
 				message = 'File must be an archive ".zip" '

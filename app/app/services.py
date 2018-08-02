@@ -4,6 +4,10 @@ import ogr
 import gdal
 from .config import *
 
+"""Importing shapefile to a database"""
+
+#---------------------------------
+
 gdal.SetConfigOption('CPL_DEBUG','ON')
 
 def testLoad(serverDS, table, sourceFile):
@@ -24,7 +28,10 @@ def import_to_db(shapefile, tableName):
 	connectionString = "PG:dbname='%s' host='%s' port='%s' user='%s' password='%s'" % (database,serverName,port,usr,pw)
 	ogrds = ogr.Open(connectionString)
 	name = testLoad(ogrds,table, shapefile)
-	
+#----------------------------------	
+
+"""Getting shapefile name to work with"""
+#--------------------------------
 
 def getShapefilename(path):
 
@@ -36,7 +43,10 @@ def getShapefilename(path):
 
 	
 	return shapefile
+#---------------------------------
 
+"""Unzipping the archive"""
+#----------------------------------
 
 def upzip_file(file_name, path):
 
@@ -49,7 +59,10 @@ def upzip_file(file_name, path):
 
 	return shapefile
 
+#-----------------------------------
 
+"""Main handler function"""
+#-----------------------------------
 def handle_uploaded_file(f, full_path, folder):
 
 	with open(full_path, 'wb+') as destination:
@@ -58,8 +71,10 @@ def handle_uploaded_file(f, full_path, folder):
 
 	
 	shapefile = upzip_file(full_path, folder)
-	tableName = 'shape-table1'
+	tableName = 'shape-table'
 	import_to_db(shapefile, tableName)
 
+
+#-----------------------------------
 	
 		

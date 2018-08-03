@@ -3,6 +3,7 @@ import os
 import ogr
 import gdal
 from .config import *
+from .render import *
 
 """Importing shapefile to a database"""
 

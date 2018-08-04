@@ -8,6 +8,7 @@ from .render import *
 """Importing shapefile to a database"""
 
 #---------------------------------
+conn = [SERVERNAME,DB,PORT,USER,PASSWORD,TABLE]
 
 gdal.SetConfigOption('CPL_DEBUG','ON')
 
@@ -20,15 +21,10 @@ def testLoad(serverDS, table, sourceFile):
 
 
 def import_to_db(shapefile, tableName):
-	serverName = SERVERNAME
-	database = DB
-	port = PORT
-	usr = USER
-	pw = PASSWORD
-	table = tableName
-	connectionString = "PG:dbname='%s' host='%s' port='%s' user='%s' password='%s'" % (database,serverName,port,usr,pw)
+	tableName = TABLE
+	connectionString = "PG:dbname='%s' host='%s' port='%s' user='%s' password='%s'" % (conn[1],conn[0],conn[2],conn[3],conn[4])
 	ogrds = ogr.Open(connectionString)
-	name = testLoad(ogrds,table, shapefile)
+	name = testLoad(ogrds, tableName, shapefile)
 #----------------------------------	
 
 """Getting shapefile name to work with"""
@@ -42,7 +38,6 @@ def getShapefilename(path):
 		if file.endswith('.shp'):
 			shapefile = str(file)
 
-	
 	return shapefile
 #---------------------------------
 
@@ -72,8 +67,11 @@ def handle_uploaded_file(f, full_path, folder):
 
 	
 	shapefile = upzip_file(full_path, folder)
-	tableName = 'shape-table'
+	tableName = TABLE
 	import_to_db(shapefile, tableName)
+	pic = render_image(conn, folder, PIC_NAME)
+
+	return pic
 
 
 #-----------------------------------

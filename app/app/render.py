@@ -2,20 +2,37 @@ import mapnik
 
 def render_image(conn, folder, pic):
 
-	m = mapnik.Map(300,300)
-	m.background = mapnik.Color("Grey")
+	m = mapnik.Map(500,500)
+	m.background = mapnik.Color("White")
 	r = mapnik.Rule()
 	s = mapnik.Style()
+
 	polygon_symbolizer = mapnik.PolygonSymbolizer()
-	polygon_symbolizer.fill = mapnik.Color('#f2eff9')
+	polygon_symbolizer.fill = mapnik.Color('Grey')
 	r.symbols.append(polygon_symbolizer)
 
-	line_symbolizer = mapnik.LineSymbolizer()
-	line_symbolizer.stroke = mapnik.Color('rgb(50%,50%,50%)')
-	line_symbolizer.stroke_width = 0.1
+	productivi_less_30 = mapnik.Rule()
+	productivi_less_30.filter = mapnik.Expression("[productivi]<=30")
+	productivi_less_30_polygon_symbolizer = mapnik.PolygonSymbolizer()
+	productivi_less_30_polygon_symbolizer.fill = mapnik.Color('#ff5959')
+	productivi_less_30.symbols.append(productivi_less_30_polygon_symbolizer)
 
-	r.symbols.append(line_symbolizer)
-	s.rules.append(r)
+	productivi_30_70 = mapnik.Rule()
+	productivi_30_70.filter = mapnik.Expression("([productivi]>=31) and ([productivi]<70)")
+	productivi_30_70_polygon_symbolizer = mapnik.PolygonSymbolizer()
+	productivi_30_70_polygon_symbolizer.fill = mapnik.Color('#ffa159')
+	productivi_30_70.symbols.append(productivi_30_70_polygon_symbolizer)
+
+	productivi_more_then_70 = mapnik.Rule()
+	productivi_more_then_70.filter = mapnik.Expression("[productivi]>=70")
+	productivi_more_then_70_polygon_symbolizer = mapnik.PolygonSymbolizer()
+	productivi_more_then_70_polygon_symbolizer.fill = mapnik.Color('#d0ff59')
+	productivi_more_then_70.symbols.append(productivi_more_then_70_polygon_symbolizer)
+	
+	s.rules.append(productivi_less_30)
+	s.rules.append(productivi_30_70)
+	s.rules.append(productivi_more_then_70)
+
 	m.append_style('My Style',s)
 
 	layer = mapnik.Layer("Data from PostGIS")

@@ -28,8 +28,10 @@ def main(request):
 				fullPath =  settings.MEDIA_ROOT + request.FILES['file'].name
 
 				pic = handle_uploaded_file(request.FILES['file'], fullPath, path)
-				message = 'File {0} succesfully uploaded and unziped to {1}..'.format(name, path)
-				
+				if not name == 'fields_test.zip':
+					message = 'File {0} was succesfully imported to database and rendered..'.format(name)
+				else:
+					message = 'File {0} was succesfully imported to database and rendered by [productivi] attribute..'.format(name)					
 				return render(request, 'main.html', {'form': form, 'message':message, 'pic': pic, 'folder': settings.MEDIA_ROOT})
 			else:
 				message = 'File must be an archive ".zip" '

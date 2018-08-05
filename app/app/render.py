@@ -2,7 +2,7 @@ import mapnik
 
 def render_image(conn, folder, pic):
 
-	m = mapnik.Map(500,500)
+	m = mapnik.Map(450,450)
 	m.background = mapnik.Color("White")
 	r = mapnik.Rule()
 	s = mapnik.Style()

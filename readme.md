@@ -5,4 +5,4 @@ The archive should also contain files like *.dbf *.prj *.shx to properly import 
 Rendered image of the file "fields_test.zip" by its attribute [productivi]:
 
 
-!(https://github.com/tehniksit/map-renderer/blob/master/render.png)
+![Image](https://github.com/tehniksit/map-renderer/blob/master/render.png)

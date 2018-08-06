@@ -4,6 +4,16 @@ import ogr
 import gdal
 from .config import *
 from .render import *
+import psycopg2
+
+def delete_table(conn, table):
+	params = "dbname='%s' host='%s' port='%s' user='%s' password='%s'" % (conn[1],conn[0],conn[2],conn[3],conn[4])
+	connection = psycopg2.connect(params)
+	cursor = connection.cursor()
+	delete_command = "DROP TABLE %s" % (table)
+	cursor.execute(delete_command)
+	connection.commit()
+	connection.close()
 
 """Importing shapefile to a database"""
 
@@ -70,6 +80,7 @@ def handle_uploaded_file(f, full_path, folder):
 	tableName = TABLE
 	import_to_db(shapefile, tableName)
 	pic = render_image(conn, folder, PIC_NAME)
+	delete_table(conn, tableName)
 
 	return pic
 
